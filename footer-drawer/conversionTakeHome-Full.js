@@ -438,7 +438,7 @@ async function loadPokemons(limit = 7) {
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
     const listJson = await fetch(
-      `https://pokeapi.co/api/v2/pokemon12?limit=${limit}`,
+      `https://pokeapi.co/api/v2/pokemon?limit=${limit}`,
       { signal: controller.signal }
     ).then((r) => {
       clearTimeout(timeoutId);
