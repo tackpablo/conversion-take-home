@@ -1,5 +1,5 @@
 // ==========================
-// SECTION + DYNAMIC MODAL SETUP
+// 1. SECTION + DYNAMIC MODAL SETUP
 // ==========================
 
 // Utility to inject CSS
