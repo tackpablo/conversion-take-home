@@ -325,47 +325,195 @@ window.addEventListener("resize", () => {
 // ----------------------
 // Load Pokémon data
 // ----------------------
+
+// Fallback Pokemon Data
+const fallbackPokemons = [
+  {
+    id: 1,
+    name: "pikachu",
+    image:
+      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkZEQjAwIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDAiPuKaoeKaoTwvdGV4dD4KPC9zdmc+",
+    types: ["electric"],
+    abilities: ["static", "lightning-rod"],
+    height: 4,
+    weight: 60,
+    base_experience: 112,
+    flavor:
+      "When several of these Pokémon gather, their electricity could build and cause lightning storms.",
+  },
+  {
+    id: 2,
+    name: "charizard",
+    image:
+      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkY3RjAwIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDAiPvCflKU8L3RleHQ+Cjwvc3ZnPg==",
+    types: ["fire", "flying"],
+    abilities: ["blaze", "solar-power"],
+    height: 17,
+    weight: 905,
+    base_experience: 267,
+    flavor:
+      "Spits fire that is hot enough to melt boulders. Known to cause forest fires unintentionally.",
+  },
+  {
+    id: 3,
+    name: "blastoise",
+    image:
+      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMDA3N0ZGIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDAiPvCfkqI8L3RleHQ+Cjwvc3ZnPg==",
+    types: ["water"],
+    abilities: ["torrent", "rain-dish"],
+    height: 16,
+    weight: 855,
+    base_experience: 239,
+    flavor:
+      "A brutal Pokémon with pressurized water jets on its shell. They are used for high-speed tackles.",
+  },
+  {
+    id: 4,
+    name: "venusaur",
+    image:
+      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMDBGRjc3Ii8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDAiPvCfjL48L3RleHQ+Cjwvc3ZnPg==",
+    types: ["grass", "poison"],
+    abilities: ["overgrow", "chlorophyll"],
+    height: 20,
+    weight: 1000,
+    base_experience: 263,
+    flavor:
+      "The flower on its back releases a soothing scent that enhances emotions.",
+  },
+  {
+    id: 5,
+    name: "eevee",
+    image:
+      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjQzQ4ODQyIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDAiPvCfkbY8L3RleHQ+Cjwvc3ZnPg==",
+    types: ["normal"],
+    abilities: ["run-away", "adaptability"],
+    height: 3,
+    weight: 65,
+    base_experience: 65,
+    flavor:
+      "Thanks to its unstable genetic makeup, this special Pokémon conceals many different possible evolutions.",
+  },
+  {
+    id: 6,
+    name: "mewtwo",
+    image:
+      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjQkI4OENDIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDAiPvCfkrs8L3RleHQ+Cjwvc3ZnPg==",
+    types: ["psychic"],
+    abilities: ["pressure", "unnerve"],
+    height: 20,
+    weight: 1220,
+    base_experience: 340,
+    flavor:
+      "It was created by a scientist after years of horrific gene splicing and DNA engineering experiments.",
+  },
+  {
+    id: 7,
+    name: "lucario",
+    image:
+      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMDA3N0ZGIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDAiPvCfpao8L3RleHQ+Cjwvc3ZnPg==",
+    types: ["fighting", "steel"],
+    abilities: ["steadfast", "inner-focus"],
+    height: 12,
+    weight: 540,
+    base_experience: 184,
+    flavor:
+      "By reading the auras of all things, it can tell how others are feeling from over half a mile away.",
+  },
+];
+
 async function loadPokemons(limit = 7) {
   try {
     pageIndicator.textContent = "Loading…";
+
+    // Test if API is reachable with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
     const listJson = await fetch(
-      `https://pokeapi.co/api/v2/pokemon?limit=${limit}`
-    ).then((r) => r.json());
+      `https://pokeapi.co/api/v2/pokemon12?limit=${limit}`,
+      { signal: controller.signal }
+    ).then((r) => {
+      clearTimeout(timeoutId);
+      if (!r.ok) throw new Error(`API returned ${r.status}`);
+      return r.json();
+    });
+
     const items = listJson.results || [];
 
+    if (items.length === 0) {
+      throw new Error("No Pokemon data returned from API");
+    }
+
     const detailPromises = items.map(async (it) => {
-      const d = await fetch(it.url).then((r) => r.json());
-      let flavor = "";
       try {
-        const sp = await fetch(d.species.url).then((r) => r.json());
-        const entry = (sp.flavor_text_entries || []).find(
-          (e) => e.language?.name === "en"
-        );
-        if (entry?.flavor_text) flavor = entry.flavor_text.replace(/\s+/g, " ");
-      } catch {}
-      return {
-        id: d.id,
-        name: d.name,
-        image:
-          d.sprites?.other?.["official-artwork"]?.front_default ||
-          d.sprites.front_default ||
-          "",
-        types: (d.types || []).map((t) => t.type.name),
-        abilities: (d.abilities || []).map((a) => a.ability.name),
-        height: d.height,
-        weight: d.weight,
-        base_experience: d.base_experience,
-        flavor,
-      };
+        const d = await fetch(it.url).then((r) => r.json());
+        let flavor = "";
+        try {
+          const sp = await fetch(d.species.url).then((r) => r.json());
+          const entry = (sp.flavor_text_entries || []).find(
+            (e) => e.language?.name === "en"
+          );
+          if (entry?.flavor_text)
+            flavor = entry.flavor_text.replace(/\s+/g, " ");
+        } catch {
+          // Flavor text fetch failed, continue without it
+        }
+
+        return {
+          id: d.id,
+          name: d.name,
+          image:
+            d.sprites?.other?.["official-artwork"]?.front_default ||
+            d.sprites?.front_default ||
+            `data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlZWUiLz48dGV4dCB4PSI1MCIgeT0iNTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIj5ObyBJbWFnZTwvdGV4dD48L3N2Zz4=`,
+          types: (d.types || []).map((t) => t.type.name),
+          abilities: (d.abilities || []).map((a) => a.ability.name),
+          height: d.height || 0,
+          weight: d.weight || 0,
+          base_experience: d.base_experience || 0,
+          flavor,
+        };
+      } catch (pokemonError) {
+        console.warn(`Failed to load details for ${it.name}:`, pokemonError);
+        // Return minimal data for failed individual Pokemon
+        return {
+          id: Math.random(),
+          name: it.name || "Unknown",
+          image: `data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlZWUiLz48dGV4dCB4PSI1MCIgeT0iNTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIj5FcnJvcjwvdGV4dD48L3N2Zz4=`,
+          types: ["unknown"],
+          abilities: ["unknown"],
+          height: 0,
+          weight: 0,
+          base_experience: 0,
+          flavor: "Unable to load Pokemon details from API.",
+        };
+      }
     });
 
     const pokemons = await Promise.all(detailPromises);
     pokemons.forEach((p) => slider.appendChild(createPokemonSlide(p)));
 
-    setTimeout(updatePageIndicator, 120); // ensure layout computes
+    setTimeout(updatePageIndicator, 120);
   } catch (err) {
-    console.error("Failed to load pokemons", err);
-    pageIndicator.textContent = "Failed to load data";
+    console.error("Failed to load pokemons from API:", err);
+    console.log("Loading fallback Pokemon data...");
+
+    // Load fallback data
+    pageIndicator.textContent = "Using sample data";
+
+    // Take only the requested number of fallback Pokemon
+    const fallbackData = fallbackPokemons.slice(0, limit);
+    fallbackData.forEach((p) => slider.appendChild(createPokemonSlide(p)));
+
+    setTimeout(updatePageIndicator, 120);
+
+    // Add a notice to the drawer
+    const notice = el("div", {
+      style:
+        "background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 6px; padding: 8px; margin-bottom: 10px; font-size: 12px; color: #856404;",
+      html: "⚠️ API unavailable - showing sample data",
+    });
+    inner.insertBefore(notice, inner.firstChild);
   }
 }
 
