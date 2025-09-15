@@ -627,30 +627,57 @@ const drawerCSS = `
   display:inline-block;
   cursor:help;
 }
+  .conv-tooltip:hover {
+  text-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+  transform: scale(1.1);
+}
 .conv-tooltip .conv-tt {
-  position:absolute;
+  position: absolute;
   left: 200%;
   transform: translateX(-50%) scale(.95);
-  background: rgba(28,28,28,0.95);
-  color:#fff;
-  padding:8px 10px;
-  border-radius:6px;
-  font-size:13px;
-  line-height:1.2;
-  white-space:normal;
-  max-width:220px;
-  opacity:0;
-  pointer-events:none;
+  background: rgba(28, 28, 28, 0.95);
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: normal;
+  max-width: 220px;
+  opacity: 0;
+  pointer-events: none;
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), 
-            opacity 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+              opacity 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.3s ease,
+              box-shadow 0.3s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   z-index: 100001;
 }
 .conv-tooltip:hover .conv-tt,
 .conv-tooltip.show .conv-tt {
-  opacity:1;
+  opacity: 1;
   transform: translateX(-50%) translateY(0) scale(1);
-  pointer-events:auto;
+  pointer-events: auto;
+  /* Enhanced hover effects */
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(147, 51, 234, 0.95));
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4),
+              0 0 20px rgba(147, 51, 234, 0.3);
+  color: #ffffff;
+}
+
+.conv-tooltip:hover .conv-tt {
+  animation: tooltipGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes tooltipGlow {
+  0% {
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4),
+                0 0 20px rgba(147, 51, 234, 0.3);
+  }
+  100% {
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.6),
+                0 0 25px rgba(147, 51, 234, 0.5),
+                0 0 40px rgba(59, 130, 246, 0.2);
+  }
 }
 
 /* arrows */
